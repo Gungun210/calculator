@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Calculator - Experiment 9</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #calc {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #e8e8e8;
+    }
+    #content {
+      background: #2c302c;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    #content form input {
+      border: 0;
+      outline: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      font-size: 15px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: #fff;
+    }
+    #backspace, #clear {
+      background-color: rgb(237, 89, 30);
+      color: white;
+    }
+    #res {
+      padding: 10px;
+    }
+    form #output {
+      display: flex;
+      justify-content: flex-end;
+      margin: 15px 0;
+    }
+    form #output input {
+      text-align: right;
+      flex: 1;
+      font-size: 25px;
+      padding: 10px;
+      background-color: #fff;
+      color: #000;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="calc">
+  <div id="content">
+    <form>
+      <div id="output">
+        <input type="text" id='res' readonly>
+      </div>
+      <div class="btn">
+        <input type="button" value='C' onclick="Clear()" id="clear">
+        <input type="button" value='⌫' onclick="Back()" id="backspace">
+        <input type="button" value='%' onclick="Solve('%')">
+        <input type="button" value='/' onclick="Solve('/')"><br>
+
+        <input type="button" value='7' onclick="Solve('7')">
+        <input type="button" value='8' onclick="Solve('8')">
+        <input type="button" value='9' onclick="Solve('9')">
+        <input type="button" value='x' onclick="Solve('*')"><br>
+
+        <input type="button" value='4' onclick="Solve('4')">
+        <input type="button" value='5' onclick="Solve('5')">
+        <input type="button" value='6' onclick="Solve('6')">
+        <input type="button" value='-' onclick="Solve('-')"><br>
+
+        <input type="button" value='1' onclick="Solve('1')">
+        <input type="button" value='2' onclick="Solve('2')">
+        <input type="button" value='3' onclick="Solve('3')">
+        <input type="button" value='+' onclick="Solve('+')"><br>
+
+        <input type="button" value='00' onclick="Solve('00')">
+        <input type="button" value='0' onclick="Solve('0')">
+        <input type="button" value='.' onclick="Solve('.')">
+        <input type="button" value='=' onclick="Result()">
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function Solve(val) {
+    var v = document.getElementById('res');
+    v.value += val;
+  }
+
+  function Result() {
+    var num1 = document.getElementById('res').value;
+    try {
+      // Replace 'x' with '*' for multiplication if used
+      var expression = num1.replace(/x/g, '*');
+      var num2 = eval(expression);
+      document.getElementById('res').value = num2;
+    } catch {
+      document.getElementById('res').value = 'Error';
+    }
+  }
+
+  function Clear() {
+    document.getElementById('res').value = '';
+  }
+
+  function Back() {
+    var ev = document.getElementById('res');
+    ev.value = ev.value.slice(0, -1);
+  }
+
+  document.addEventListener('keydown', function (event) {
+    const key = event.key;
+    const validKeys = '0123456789+-*/.%';
+    if (validKeys.includes(key)) {
+      Solve(key === '*' ? 'x' : key);
+    } else if (key === 'Enter') {
+      event.preventDefault(); // Avoid form submission
+      Result();
+    } else if (key === 'Backspace') {
+      Back();
+    } else if (key.toLowerCase() === 'c') {
+      Clear();
+    }
+  });
+</script>
+
+</body>
+</html>
